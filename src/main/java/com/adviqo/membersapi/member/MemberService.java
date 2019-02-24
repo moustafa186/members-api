@@ -16,11 +16,16 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> getMember(Long id) {
-        return memberRepository.findById(id);
+    public Iterable<Member> listMembers() {
+        return memberRepository.findAll();
     }
 
-    public Member updateMember(Long id, Member member) {
+    public Member getMember(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member with id " + id + " was not found."));
+    }
+
+    public Member updateMember(Member member, Long id) {
         Optional<Member> memberToUpdate = memberRepository.findById(id);
         if(memberToUpdate.isPresent()) {
             member.setId(id);
@@ -34,7 +39,4 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public Iterable<Member> listMembers() {
-        return memberRepository.findAll();
-    }
 }
