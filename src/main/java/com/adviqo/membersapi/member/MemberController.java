@@ -3,8 +3,13 @@ package com.adviqo.membersapi.member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value="/api",
+        produces={APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+        consumes={APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
 public class MemberController {
 
     @Autowired
@@ -12,6 +17,7 @@ public class MemberController {
 
     @PostMapping("/members")
     public Member createMember(@RequestBody Member member) {
+        System.out.println(member);
         return memberService.createMember(member);
     }
 
@@ -26,7 +32,7 @@ public class MemberController {
     }
 
     @PutMapping("/members/{id}")
-    public Member readMember(@RequestBody Member member, @PathVariable Long id) {
+    public Member updateMember(@RequestBody Member member, @PathVariable Long id) {
         return memberService.updateMember(member, id);
     }
 
