@@ -1,19 +1,22 @@
 package com.adviqo.membersapi.member;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.springframework.test.annotation.DirtiesContext.*;
 
 @RunWith(SpringRunner.class)
@@ -31,7 +34,7 @@ public class MemberServiceTest {
     private List<Member> members;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         m1 = new Member();
         m1.setFirstName("Moustafa");
         m1.setLastName("Mansour");
@@ -57,6 +60,9 @@ public class MemberServiceTest {
 
         memberRepository.saveAll(members);
     }
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void createMember() {
@@ -96,6 +102,12 @@ public class MemberServiceTest {
     }
 
     @Test
+    public void getMemberWithNonExistingId_ShouldFail() {
+        exceptionRule.expect(EntityNotFoundException.class);
+        Member retrievedMember = memberService.getMember(5L);
+    }
+
+    @Test
     public void updateMember() {
         m2.setPostalCode("12345");
         Member updatedMember = memberService.updateMember(m2, 2L);
@@ -104,8 +116,20 @@ public class MemberServiceTest {
     }
 
     @Test
+    public void updateMemberWithNonExistingId_ShouldFail() {
+        exceptionRule.expect(EntityNotFoundException.class);
+        memberService.updateMember(m2,5L);
+    }
+
+    @Test
     public void deleteMember() {
         memberService.deleteMember(1L);
         assertEquals(2, memberRepository.count());
+    }
+
+    @Test
+    public void deleteMemberWithNonExistingId_ShouldFail() {
+        exceptionRule.expect(EmptyResultDataAccessException.class);
+        memberService.deleteMember(5L);
     }
 }
