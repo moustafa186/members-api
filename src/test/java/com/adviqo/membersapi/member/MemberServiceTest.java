@@ -104,7 +104,7 @@ public class MemberServiceTest {
     @Test
     public void getMemberWithNonExistingId_ShouldFail() {
         exceptionRule.expect(EntityNotFoundException.class);
-        Member retrievedMember = memberService.getMember(5L);
+        memberService.getMember(5L);
     }
 
     @Test
