@@ -3,6 +3,8 @@ package com.adviqo.membersapi.member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
@@ -16,8 +18,7 @@ public class MemberController {
     MemberService memberService;
 
     @PostMapping("/members")
-    public Member createMember(@RequestBody Member member) {
-        System.out.println(member);
+    public Member createMember(@Valid @RequestBody Member member) {
         return memberService.createMember(member);
     }
 
@@ -32,7 +33,7 @@ public class MemberController {
     }
 
     @PutMapping("/members/{id}")
-    public Member updateMember(@RequestBody Member member, @PathVariable Long id) {
+    public Member updateMember(@Valid @RequestBody Member member, @PathVariable Long id) {
         return memberService.updateMember(member, id);
     }
 

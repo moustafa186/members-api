@@ -43,5 +43,4 @@ public class MemberService implements IMemberService {
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
     }
-
 }

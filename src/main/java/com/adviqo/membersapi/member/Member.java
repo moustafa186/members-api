@@ -1,31 +1,30 @@
 package com.adviqo.membersapi.member;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 
 @Entity(name = "members")
 @XmlRootElement(name="member")
-@JsonRootName("member")
 public class Member {
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(name = "firstName")
+    @NotNull
     private String firstName;
 
     @Column(name = "lastName")
+    @NotNull
     private String lastName;
 
     @Column(name = "dateOfBirth")
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @NotNull
     private LocalDate dateOfBirth;
 
     @Column(name = "postalCode")
