@@ -1,6 +1,7 @@
 package com.adviqo.membersapi.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ public class MemberController {
     MemberService memberService;
 
     @PostMapping("/members")
+    @ResponseStatus(HttpStatus.CREATED)
     public Member createMember(@Valid @RequestBody Member member) {
         return memberService.createMember(member);
     }
@@ -38,6 +40,7 @@ public class MemberController {
     }
 
     @DeleteMapping ("/members/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);
     }

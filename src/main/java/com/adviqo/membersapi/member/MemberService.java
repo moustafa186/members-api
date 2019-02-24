@@ -1,6 +1,7 @@
 package com.adviqo.membersapi.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,13 +24,13 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public Member getMember(Long id) {
+    public Member getMember(Long id) throws EntityNotFoundException {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Member with id " + id + " was not found."));
     }
 
     @Override
-    public Member updateMember(Member member, Long id) {
+    public Member updateMember(Member member, Long id) throws EntityNotFoundException {
         Optional<Member> memberToUpdate = memberRepository.findById(id);
         if(memberToUpdate.isPresent()) {
             member.setId(id);
@@ -40,7 +41,11 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+    public void deleteMember(Long id) throws EntityNotFoundException {
+        try {
+            memberRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Member with id " + id + " was not found.");
+        }
     }
 }

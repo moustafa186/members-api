@@ -82,16 +82,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    protected ResponseEntity<Object> handleDeleteNonExistingEntity(EmptyResultDataAccessException ex) {
-        ApiError apiError = new ApiError(NOT_FOUND);
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
-
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request)  {
         String error = "Malformed JSON request";
         return buildResponseEntity(new ApiError(BAD_REQUEST, error, ex));
     }
