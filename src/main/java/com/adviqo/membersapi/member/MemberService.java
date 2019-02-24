@@ -7,24 +7,28 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
-public class MemberService {
+public class MemberService implements IMemberService {
 
     @Autowired
     private MemberRepository memberRepository;
 
+    @Override
     public Member createMember(Member member) {
         return memberRepository.save(member);
     }
 
+    @Override
     public Iterable<Member> listMembers() {
         return memberRepository.findAll();
     }
 
+    @Override
     public Member getMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Member with id " + id + " was not found."));
     }
 
+    @Override
     public Member updateMember(Member member, Long id) {
         Optional<Member> memberToUpdate = memberRepository.findById(id);
         if(memberToUpdate.isPresent()) {
@@ -35,6 +39,7 @@ public class MemberService {
         }
     }
 
+    @Override
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
     }
